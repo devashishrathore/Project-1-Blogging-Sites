@@ -23,7 +23,7 @@ TOPIC: Middleware2
 	address:"New delhi",
 	age: 90,
  	gender: “female” // Allowed values are - “male”, “female”, “other”
-	freeAppUser: false // Default false value
+	freeAppUser: false // Default false value.
 	}
 ```
 
@@ -50,14 +50,14 @@ date: “22/11/2021”
 ```
 
 
-NOTE: In some of the below apis a header validation is to be performed (create user and create order). The name of the header is ‘isFreeApp’. Write a header validation that simply checks whether this header is present or not. Please note this validation should only be called in create user and create order apis.
+NOTE: In some of the below apis a header validation is to be performed (create user and create order). The name of the header is ‘isFreeApp’. Write a header validation that simply checks whether this header is present or not. Please note this validation should only be called in create user and create order apis. Perform this validation in a middleware.
 
-- Write a POST api to create a product from the product details in request body.
+- Write a POST api to create a product from the product details in request body. freeAppUser property in a User document depends on the header isFreeApp
 - Write a POST api to create a user that takes user details from the request body. If the header isFreeApp is not present terminate the request response cycle with an error message that the request is missing a mandatory header
 - Write a POST api for order purchase that takes a userId and a productId in request body. 
 If the header isFreeApp is not present terminate the request response cycle with an error message that the request is missing a mandatory header
 If the header is present the control goes to the request handler. Perform the user and product validation. Check if the user exists as well as whether the product exists. Return an error with a suitable error message if either of these validations fail
-For every purchase we save an order document in the orders collection. If the isFreeApp header is true then the balance of the user is not deducted and the amount in order is set to 0 as well the flag isFreeAppUser is set to true. If this header has a false value then the product’s price is checked. This value is deducted from the user’s balance and the order amount is set to the product’s price as well as the flag isFreeAppUser is set to false in order document.
+For every purchase we save an order document in the orders collection. freeAppUser property in an Order document depends on the header isFreeAppIf the isFreeApp header is true then the balance of the user is not deducted and the amount in order is set to 0 as well the flag isFreeAppUser is set to true. If this header has a false value then the product’s price is checked. This value is deducted from the user’s balance and the order amount is set to the product’s price as well as the flag isFreeAppUser is set to false in order document.
 
 ### Hints for problem 3
 
