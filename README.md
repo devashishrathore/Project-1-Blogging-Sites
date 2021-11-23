@@ -52,7 +52,7 @@ date: “22/11/2021”
 
 NOTE: In some of the below apis a header validation is to be performed (create user and create order). The name of the header is ‘isFreeApp’. Write a header validation that simply checks whether this header is present or not. Please note this validation should only be called in create user and create order apis. Perform this validation in a middleware.
 
-- Write a POST api to create a product from the product details in request body. freeAppUser property in a User document depends on the header isFreeApp
+- Write a POST api to create a product from the product details in request body. 
 - Write a POST api to create a user that takes user details from the request body. If the header isFreeApp is not present terminate the request response cycle with an error message that the request is missing a mandatory header
 - Write a POST api for order purchase that takes a userId and a productId in request body. 
 If the header isFreeApp is not present terminate the request response cycle with an error message that the request is missing a mandatory header
