@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const route = require("./routes/route.js");
-const gbMiddleware = require("./middlewares/globalMiddleware");
+// const gbMiddleware = require("./middlewares/globalMiddleware");
 
 const app = express();
 
@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use("/", route);
-app.use(gbMiddleware.captureInfo);
+// app.use(middlewares.emailValidator);
 
 
 

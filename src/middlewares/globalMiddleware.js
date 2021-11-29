@@ -1,8 +1,17 @@
-let captureInfo = function (req, res, next) {
-    let acceptHeaderValue = req.headers['accept']
-    req.headers['batch']='Radium'
-    console.log('Global middleware called')
-    res.send('Global middleware called')
+var validator = require("email-validator");
+ 
+// validator.validate("test@email.com");
+
+const emailValidator=async function(req,res,next){
+    let Id=req.body.email
+    let Idd=validator.validate(Id);
+    console.log(Idd)
+    if(Idd){
+        
+        next();
+    }else{
+        res.status(404).send('Plz give valid email')
+    }
 }
 
-module.exports.captureInfo = captureInfo
+module.exports.emailValidator = emailValidator
