@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const authorController= require("../controller/authorController")
+const blogController= require("../controller/blogController")
 
-router.post('/test-me', function (req, res, next) {    
-    console.log('Inside the route handler checking the header batch: '+req.headers['batch'])
-    let host = req.headers['host']
-    let hostWithName = host + " " + "Sabiha Khan"
-    console.log('My response headers: '+res.getHeaderNames())
-    res.setHeader('hostWithName', hostWithName)
-    //res.send({data: 'I was in the handler'})
-    res.finalData = {data: 'I was in the handler'}
-    next()
+router.get('/test-me', function (req, res) {
+    res.send('My first ever api!')
 });
-
+router.post('/createAuthor',  authorController.createAuthor);
+router.post('/createBlog', blogController.createBlog);
+router.get('/getAllBlogs', blogController.getAllBlogs);
+router.put('/updateBlogWithNewFeatures', blogController.updateBlogWithNewFeatures);
 module.exports = router;

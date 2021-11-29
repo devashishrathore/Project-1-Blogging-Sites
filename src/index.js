@@ -19,7 +19,7 @@ app.use(gbMiddleware.captureInfo);
 
 mongoose
   .connect(
-    "mongodb+srv://users-open-to-all:hiPassword123@cluster0.uh35t.mongodb.net/pkDB?retryWrites=true&w=majority",
+    "mongodb+srv://monty-python:SnYUEY4giV9rekw@functionup-backend-coho.0zpfv.mongodb.net/RaviKantKannaujiya123_db?authSource=admin&replicaSet=atlas-60843q-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true",
     { useNewUrlParser: true }
   )
   .then(() => console.log("mongodb running and connected"))
