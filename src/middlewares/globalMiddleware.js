@@ -2,8 +2,6 @@ var validator = require("email-validator");
 const blogModel = require("../models/blogModel");
 const jwt = require("jsonwebtoken")
  
-// validator.validate("test@email.com");
-
 const emailValidator=async function(req,res,next){
     let Id=req.body.email
     let Idd=validator.validate(Id);
@@ -19,13 +17,16 @@ const activityToken = async function (req, res, next) {
     try{
         let x=req.params.blogId
         let y=req.body.authorId
-    if(x || y){
-    const b=await blogModel.findOne({$or:[{_id:x},{authorId:y}]})
+        let z= req.headers.author_id
+        
+    if(x || y || z){
+    const b=await blogModel.findOne({$or:[{_id:x},{authorId:y},{authorId:z}]})
     let token = req.headers['x-api-key']
+
     let validtoken = jwt.verify(token, 'radium')
     if (validtoken) {
-        if (validtoken.authorId ==b.authorId) {                                         //req.params.userId=> we are giving is in url i.e userId
-            req.validtoken = validtoken;       //here we have created a key value pair=> key=validtoken and value=validtoken
+        if (validtoken.authorId ==b.authorId) {                                         
+            req.validtoken = validtoken;       
             next()
         }
         else {

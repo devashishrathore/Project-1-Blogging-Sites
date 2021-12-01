@@ -11,7 +11,7 @@ router.get('/test-me', function (req, res) {
 
 router.post('/createAuthor', middlewares.emailValidator ,authorController.createAuthor);
 router.post('/createBlog',middlewares.activityToken, blogController.createBlog);
-router.get('/getAllBlogs', blogController.getAllBlogs);
+router.get('/getAllBlogs', middlewares.activityToken,blogController.getAllBlogs);
 router.post('/deleteBlogById/:blogId' ,middlewares.activityToken,blogController.deleteBlogById);
 router.post('/deleteBlogByAttribute', blogController.deleteBlogByAttribute);
 router.post('/loginforblog', blogController.loginforblog);

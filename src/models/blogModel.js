@@ -17,15 +17,13 @@ const blogSchema=new mongoose.Schema({
     tags:{type:[String]}, //{array of string}, 
     category: {
         type:[String],
-        required:true     //string, mandatory, examples: [technology, entertainment, life style, food, fashion]},
+        required:true     
     },
-    subcategory:[String], //{array of string, examples[technology-[web development, mobile development, AI, ML etc]] }, 
+    subcategory:[String], 
      
-    // createdAt, updatedAt, //00/00/0000
-     
-     deletedAt:String, //{when the document is deleted}, 
+    deletedAt:String,  
      isDeleted: {type:Boolean, default: false}, 
-     publishedAt:String, //{when the blog is published}, 
+     publishedAt:String,  
      isPublished: {type:Boolean, default: false}
 
 },{timestamps:true});
