@@ -1,45 +1,31 @@
-var validator = require("email-validator");
-const blogModel = require("../models/blogModel");
+const validator = require("email-validator");
 const jwt = require("jsonwebtoken")
- 
-const emailValidator=async function(req,res,next){
-    let Id=req.body.email
-    let Idd=validator.validate(Id);
-    console.log(Idd)
-    if(Idd){
-        
+
+const emailValidator = async function (req, res, next) {
+    let Id = req.body.email
+    let Idd = validator.validate(Id);
+    if (Idd) {
         next();
-    }else{
-        res.status(404).send('Plz give valid email')
+    } else {
+        res.status(404).send({ msg: "Plz give valid email" })
     }
 }
 const activityToken = async function (req, res, next) {
-    try{
-        let x=req.params.blogId
-        let y=req.body.authorId
-        let z= req.headers.author_id
-        
-    if(x || y || z){
-    const b=await blogModel.findOne({$or:[{_id:x},{authorId:y},{authorId:z}]})
-    let token = req.headers['x-api-key']
-
-    let validtoken = jwt.verify(token, 'radium')
-    if (validtoken) {
-        if (validtoken.authorId ==b.authorId) {                                         
-            req.validtoken = validtoken;       
-            next()
+    try {
+        let token = req.headers['x-api-key']
+        if (!token) {
+            res.status(403).send({ status: false, msg: "Missing authentication token in the request part" });
         }
-        else {
-            res.status(403).send({ status: false, msg: "You are not authorised" })
+        let validtoken = jwt.verify(token, 'radium')
+        if (!validtoken) {
+            res.status(403).send({ status: false, msg: "The token is invalid" })
         }
+        req.authorId = validtoken.authorId
+        next();
+    } catch (err) {
+        res.status(500).send({ status: false, msg: "Internal Server Error", msg: err });
     }
-    else {
-        res.status(401).send({ status: false, msg: "The token is invalid" })
-    }}
-  } catch (err) {
-    res.status(500).send({ msg: err });
-  }
 }
 
-module.exports.activityToken=activityToken;
-module.exports.emailValidator = emailValidator
+module.exports.activityToken = activityToken;
+module.exports.emailValidator = emailValidator;
