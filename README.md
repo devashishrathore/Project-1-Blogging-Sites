@@ -1,79 +1,132 @@
-# TOPIC: Middleware2
+# Radium
+# Repository for backend cohort - Radium
 
-## Request
-- Access headers
-- Set headers
-- Set attributes
+# Blogging Site Mini Project Requirement
+# Phase I
 
-## Response 
-- Set headers
-- Get headers
+# Models
+# Author Model
+{ fname: { mandatory}, lname: {mandatory}, title: {mandatory, enum[Mr, Mrs, Miss]}, email: {mandatory, valid email, unique}, password: {mandatory} }
 
-## Assignment
+# Blogs Model
+{ title: {mandatory}, body: {mandatory}, authorId: {mandatory, refs to author model}, tags: {array of string}, category: {string, mandatory, examples: [technology, entertainment, life style, food, fashion]}, subcategory: {array of string, examples[technology-[web development, mobile development, AI, ML etc]] }, createdAt, updatedAt, deletedAt: {when the document is deleted}, isDeleted: {boolean, default: false}, publishedAt: {when the blog is published}, isPublished: {boolean, default: false}}
 
-TOPIC: Middleware2
+# Author APIs
 
-- For this assignment you have to create a new branch - assignment/middleware2
-- Your user document should look like this
-```
- 	{ 
-    _id: ObjectId("61951bfa4d9fe0d34da86829"),
-    name: "Sabiha Khan",
-	balance:100, // Default balance at user registration is 100
-	address:"New delhi",
-	age: 90,
- 	gender: “female” // Allowed values are - “male”, “female”, “other”
-	freeAppUser: false // Default false value.
-	}
-```
+# POST/authors
+Create an author - atleast 5 authors
+Create a author document from request body. Endpoint: BASE_URL/authors
 
-- Your product document should look like this
-```
+# POST /blogs
+1)Create a blog document from request body. Get authorId in request body only.
+
+2)Make sure the authorId is a valid authorId by checking the author exist in the authors collection.
+
+3)Return HTTP status 201 on a succesful blog creation. Also return the blog document. The response should be a JSON object like this
+
+4)Create atleast 5 blogs for each author
+
+5)Return HTTP status 400 for an invalid request with a response body like this
+
+# GET /blogs
+1)Returns all blogs in the collection that aren't deleted and are published
+
+2)Return the HTTP status 200 if any documents are found. The response structure should be like this
+
+3)If no documents are found then return an HTTP status 404 with a response like this
+
+4)Filter blogs list by applying filters. Query param can have any combination of below filters.
+=>By author Id
+=>By category
+=>List of blogs that have a specific tag
+=>List of blogs that have a specific subcategory example of a query url: blogs?filtername=filtervalue&f2=fv2
+
+# PUT /blogs/:blogId
+1)Updates a blog by changing the its title, body, adding tags, adding a subcategory. (Assuming tag and subcategory 
+received in body is need to be added)
+
+2)Updates a blog by changing its publish status i.e. adds publishedAt date and set published to true
+
+3)Check if the blogId exists (must have isDeleted false). If it doesn't, return an HTTP status 404 with a response body like this
+
+4)Return an HTTP status 200 if updated successfully with a body like this
+
+5)Also make sure in the response you return the updated blog document.
+
+# DELETE /blogs/:blogId
+1)Check if the blogId exists( and is not deleted). If it does, mark it deleted and return an HTTP status 200 without any response body.
+
+2)If the blog document doesn't exist then return an HTTP status of 404 with a body like this
+
+# DELETE /blogs?queryParams
+1)Delete blog documents by category, authorid, tag name, subcategory name, unpublished
+
+2)If the blog document doesn't exist then return an HTTP status of 404 with a body like this
+
+# Phase II
+Add authentication and authroisation feature
+
+# POST /login
+1)Allow an author to login with their email and password. On a successful login attempt return a JWT token contatining the authorId
+
+2)If the credentials are incorrect return a suitable error message with a valid HTTP status code
+
+# Authentication
+1)Add an authorisation implementation for the JWT token that validates the token before every protected endpoint is called. If the validation fails, return a suitable error message with a corresponding HTTP status code
+
+2)Protected routes are create a blog, edit a blog, get the list of blogs, delete a blog(s)
+
+3)Set the token, once validated, in the request - x-api-key
+
+4)Use a middleware for authentication purpose.
+
+# Authorisation
+1)Make sure that only the owner of the blogs is able to edit or delete the blog.
+
+2)In case of unauthorized access return an appropirate error message.
+
+# Testing
+1)To test these apis create a new collection in Postman named Project 1 Blogging
+
+2)Each api should have a new request in this collection
+
+3)Each request in the collection should be rightly named. Eg Create author, Create blog, Get blogs etc
+
+4)Each member of each team should have their tests in running state
+
+Refer below sample
+
+# A Postman collection and request sample
+
+# Response
+# Successful Response structure
 {
-	_id: ObjectId("61951bfa4d9fe0d34da86344"),
-	name:"Catcher in the Rye",
-	category:"book",
-	price:70 //mandatory property
-}
-```
+  status: true,
+  data: {
 
-Your Order document looks like this.
-```
+  }
+}
+# Error Response structure
 {
-_id: ObjectId("61951bfa4d9fe0d34da86344"),
-userId: “61951bfa4d9fe0d34da86829”,
-productId: “61951bfa4d9fe0d34da86344”
-amount: 0,
-isFreeAppUser: true, 
-date: “22/11/2021”
+  status: false,
+  msg: ""
 }
-```
+# Collections
+# Blogs
+{
+  "title": "How to win friends",
+  "body": "Blog body",
+  "tags": ["Book", "Friends", "Self help"],
+  "category": "Book",
+  "subcategory": ["Non fiction", "Self Help"],
+  "published": false,
+  "publishedAt": "", // if published is true publishedAt will have a date 2021-09-17T04:25:07.803Z
+  "deleted": false,
+  "deletedAt": "", // if deleted is true deletedAt will have a date 2021-09-17T04:25:07.803Z,
+  "createdAt": "2021-09-17T04:25:07.803Z",
+  "updatedAt": "2021-09-17T04:25:07.803Z",
+}
 
+Refer https://jsonplaceholder.typicode.com/guide/ for some fake blogs data.
 
-NOTE: In some of the below apis a header validation is to be performed (create user and create order). The name of the header is ‘isFreeApp’. Write a header validation that simply checks whether this header is present or not. Please note this validation should only be called in create user and create order apis. Perform this validation in a middleware.
-
-- Write a POST api to create a product from the product details in request body. 
-- Write a POST api to create a user that takes user details from the request body. If the header isFreeApp is not present terminate the request response cycle with an error message that the request is missing a mandatory header
-- Write a POST api for order purchase that takes a userId and a productId in request body. 
-If the header isFreeApp is not present terminate the request response cycle with an error message that the request is missing a mandatory header
-If the header is present the control goes to the request handler. Perform the user and product validation. Check if the user exists as well as whether the product exists. Return an error with a suitable error message if either of these validations fail
-For every purchase we save an order document in the orders collection. freeAppUser property in an Order document depends on the header isFreeAppIf the isFreeApp header is true then the balance of the user is not deducted and the amount in order is set to 0 as well the flag isFreeAppUser is set to true. If this header has a false value then the product’s price is checked. This value is deducted from the user’s balance and the order amount is set to the product’s price as well as the flag isFreeAppUser is set to false in order document.
-- Update the logic in middleware to set the isFreeAppUser attribute in req. Use this attribute in the route handler for populating the isFreeAppUser attributes of User and Order collection. 
-
-### Hints for problem 3
-
-1. Validate the header in a middleware. Terminate the req-res cycle if this fails.
-2. Validate the userId. Send error if userId is invalid
-3. Validate the productId. Send the error if productId is invalid
-4. Now write the logic for order creation. 3 scenarios
-//Scenario 1
-For paid user app and the user has sufficient balance. We deduct the balance from user's balance and update the user. We create an order document
-
-//Scenaio 2
-For paid app user and the user has insufficient balance. We send an error that the user doesn't have enough balance
-
-//Scenario 3
-For free app user, we dont check user's ba;ance and create the order with 0 amount.
-
-
-
+# Note: Create a group database and use the same database in connection string by replacing `groupXDatabase
