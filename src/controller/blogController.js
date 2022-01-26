@@ -147,7 +147,7 @@ const deleteBlogByID = async function (req, res) {
       res.status(401).send({ status: false, message: `Unauthorized access! Owner info doesn't match` });
     }
 
-    await blogModel.findOneAndUpdate({ _id: blogId }, { $set: { isDeleted: true, deletedAt: new Date() } })
+    await blogModel.findOneAndUpdate({ _id: blogId }, { $set: { isDeleted: true, deletedAt: new Date(), isPublished: false, publishedAt: null } })
     res.status(200).send({ status: true, message: `Blog deleted successfully` })
   } catch (error) {
     res.status(500).send({ status: false, msg: "Something went wrong", message: error.message });
